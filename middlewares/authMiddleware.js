@@ -10,7 +10,7 @@ const protect = async (req, res, next) => {
     req.user = await User.findById(decoded.id).select('-password');
     next();
   } catch (err) {
-    res.status(401).json({ message: "Token failed" });
+    res.status(401).json({ message: `Token failed for ${err}`  });
   }
 };
 
