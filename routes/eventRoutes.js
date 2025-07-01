@@ -15,6 +15,7 @@ const protect = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 router.get('/', protect, getEvents);
+router.get('/public',  getEvents);
 router.get('/search', protect, searchEvents);
 router.post('/', protect, addEvent);
 router.get('/my', protect, getMyEvents);
