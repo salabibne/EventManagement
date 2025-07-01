@@ -52,8 +52,17 @@ exports.getMyEvents = async (req, res) => {
   res.json(events);
 };
 
+exports.getMyEventsOnEdit = async (req, res) => {
+  const authorizePerson =await Event.find({ creator: req.user._id });
+  if(!authorizePerson)return res.status(404).json({ message: 'You are not a event Creator' });
+ const event = await Event.findById(req.params.id);
+ if (!event) return res.status(404).json({ message: 'Event not found' });
+  res.json(event);
+};
+
 exports.updateEvent = async (req, res) => {
   const event = await Event.findById(req.params.id);
+ 
   if (!event) return res.status(404).json({ message: 'Event not found' });
 
   if (!event.creator.equals(req.user._id))
@@ -72,6 +81,6 @@ exports.deleteEvent = async (req, res) => {
   if (!event.creator.equals(req.user._id))
     return res.status(403).json({ message: 'Not allowed' });
 
-  await event.remove();
+  await event.deleteOne({_id: req.params.id});
   res.json({ message: 'Event deleted' });
 };
